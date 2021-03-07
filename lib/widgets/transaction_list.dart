@@ -12,58 +12,57 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      child: SingleChildScrollView(
-        child: Column(
-          children: transactions
-              .map((transaction) => Card(
-                    child: Row(
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(
-                            minWidth: 100,
-                          ),
-                          margin: EdgeInsets.symmetric(
-                            vertical: 10,
-                            horizontal: 15,
-                          ),
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.purple,
-                              width: 2,
-                            ),
-                          ),
-                          child: Text(
-                            '\$${transaction.amount.toString()}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.purple,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              transaction.title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(DateFormat.yMMMd().format(transaction.date),
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                ))
-                          ],
-                        )
-                      ],
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Card(
+            child: Row(
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                    minWidth: 100,
+                  ),
+                  margin: EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 15,
+                  ),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.purple,
+                      width: 2,
                     ),
-                  ))
-              .toList(),
-        ),
+                  ),
+                  child: Text(
+                    '\$${transactions[index].amount.toString()}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.purple,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      transactions[index].title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(DateFormat.yMMMd().format(transactions[index].date),
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ))
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+        itemCount: transactions.length,
       ),
     );
   }
