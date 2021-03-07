@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,7 +20,24 @@ class MyHomePage extends StatelessWidget {
         title: Text('Flutter App Home Page'),
       ),
       body: Center(
-        child: Text('Home Page'),
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Card(
+                elevation: 2,
+                child: Text('CARD WITH DAYS'),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                elevation: 2,
+                child: Text('CARD WITH EXPENSES'),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
