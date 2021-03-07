@@ -33,7 +33,7 @@ class TransactionItem extends StatelessWidget {
               ),
             ),
             child: Text(
-              '\$${amount.toString()}',
+              '\$${amount.toStringAsFixed(2)}',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.purple,
