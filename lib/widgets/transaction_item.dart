@@ -28,18 +28,17 @@ class TransactionItem extends StatelessWidget {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.purple,
+                color: Theme.of(context).primaryColor,
                 width: 2,
               ),
             ),
             child: Text(
               '\$${amount.toStringAsFixed(2)}',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.purple,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Theme.of(context).primaryColor),
             ),
           ),
           Column(
@@ -47,15 +46,13 @@ class TransactionItem extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.headline2,
               ),
-              Text(DateFormat.yMMMd().format(date),
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ))
+              Text(
+                DateFormat.yMMMd().format(date),
+                // style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.subtitle1,
+              )
             ],
           )
         ],

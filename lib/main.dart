@@ -11,6 +11,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Expenses App',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        accentColor: Colors.lightGreen,
+        fontFamily: 'Quicksand',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              subtitle1: TextStyle(
+                fontFamily: 'Quicksand',
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+              headline2: TextStyle(
+                fontFamily: 'Quicksand',
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+        appBarTheme: AppBarTheme(
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                ),
+              ),
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -82,7 +107,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: double.infinity,
                 child: Card(
                   elevation: 2,
-                  child: Text('CARD WITH DAYS'),
+                  child: Text(
+                    'CARD WITH DAYS',
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                  ),
                 ),
               ),
               TransactionList(_userTransactions),
