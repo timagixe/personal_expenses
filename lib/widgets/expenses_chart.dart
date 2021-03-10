@@ -34,7 +34,7 @@ class ExpensesChart extends StatelessWidget {
         'day': weekDayShortcut,
         'amount': totalAmount,
       };
-    });
+    }).reversed.toList();
   }
 
   double get totalSpending {
