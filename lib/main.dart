@@ -113,10 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Container(
                 width: double.infinity,
-                child: Card(
-                  elevation: 2,
-                  child: ExpensesChart(_recentTransactions),
-                ),
+                child: ExpensesChart(_recentTransactions),
               ),
               TransactionList(_userTransactions),
             ],
