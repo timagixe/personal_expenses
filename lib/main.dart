@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+// THIS IMPORT IS REQUIRED FOR WidgetsFlutterBinding AND SystemChrome
+// import 'package:flutter/services.dart';
 
 import 'models/transaction.dart';
 import './widgets/new_transaction.dart';
@@ -77,6 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
+  bool _showChart = false;
+
   List<Transaction> get _recentTransactions {
     return _userTransactions
         .where((transaction) => transaction.date
@@ -114,6 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final AppBar appBar = AppBar(
       title: Text('Expenses App'),
       actions: [
@@ -124,35 +130,66 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    final double expensesChartHeight = (MediaQuery.of(context).size.height -
-            appBar.preferredSize.height -
-            MediaQuery.of(context).padding.top) *
-        0.3;
+    final double expensesChartHeightInPortrait =
+        (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.3;
+
+    final double expensesChartHeightInLandscape =
+        (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.7;
 
     final double transactionsListHeight = (MediaQuery.of(context).size.height -
             appBar.preferredSize.height -
             MediaQuery.of(context).padding.top) *
         0.7;
 
+    final Widget transactionListContainer = Container(
+      height: transactionsListHeight,
+      child: TransactionList(
+        transactions: _userTransactions,
+        deleteTransactionById: _deleteTransactionById,
+      ),
+    );
+
     return Scaffold(
       appBar: appBar,
-      body: Center(
-        child: Column(
-          children: [
+      body: Column(
+        children: [
+          if (isLandscape)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Show chart'),
+                Switch(
+                  value: _showChart,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _showChart = newValue;
+                    });
+                  },
+                )
+              ],
+            ),
+          if (isLandscape)
+            _showChart
+                ? Container(
+                    height: expensesChartHeightInLandscape,
+                    width: double.infinity,
+                    child: ExpensesChart(_recentTransactions),
+                  )
+                : transactionListContainer,
+          if (!isLandscape)
             Container(
-              height: expensesChartHeight,
+              height: expensesChartHeightInPortrait,
               width: double.infinity,
               child: ExpensesChart(_recentTransactions),
             ),
-            Container(
-              height: transactionsListHeight,
-              child: TransactionList(
-                transactions: _userTransactions,
-                deleteTransactionById: _deleteTransactionById,
-              ),
-            ),
-          ],
-        ),
+          if (!isLandscape) transactionListContainer
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
