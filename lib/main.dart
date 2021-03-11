@@ -120,8 +120,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final meidaQuery = MediaQuery.of(context);
+
+    final isLandscape = meidaQuery.orientation == Orientation.landscape;
     final AppBar appBar = AppBar(
       title: Text('Expenses App'),
       actions: [
@@ -132,21 +133,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    final double expensesChartHeightInPortrait =
-        (MediaQuery.of(context).size.height -
-                appBar.preferredSize.height -
-                MediaQuery.of(context).padding.top) *
-            0.3;
-
-    final double expensesChartHeightInLandscape =
-        (MediaQuery.of(context).size.height -
-                appBar.preferredSize.height -
-                MediaQuery.of(context).padding.top) *
-            0.7;
-
-    final double transactionsListHeight = (MediaQuery.of(context).size.height -
+    final double expensesChartHeightInPortrait = (meidaQuery.size.height -
             appBar.preferredSize.height -
-            MediaQuery.of(context).padding.top) *
+            meidaQuery.padding.top) *
+        0.3;
+
+    final double expensesChartHeightInLandscape = (meidaQuery.size.height -
+            appBar.preferredSize.height -
+            meidaQuery.padding.top) *
+        0.7;
+
+    final double transactionsListHeight = (meidaQuery.size.height -
+            appBar.preferredSize.height -
+            meidaQuery.padding.top) *
         0.7;
 
     final Widget transactionListContainer = Container(
