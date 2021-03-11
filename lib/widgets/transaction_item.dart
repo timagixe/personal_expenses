@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TransactionItem extends StatelessWidget {
+  final String id;
   final String title;
   final double amount;
   final DateTime date;
+  final Function deleteTransactionById;
 
   TransactionItem({
+    @required this.id,
     @required this.title,
     @required this.date,
     @required this.amount,
+    @required this.deleteTransactionById,
   });
 
   @override
@@ -33,6 +37,11 @@ class TransactionItem extends StatelessWidget {
         subtitle: Text(
           DateFormat.yMMMd().format(date),
           style: Theme.of(context).textTheme.subtitle1,
+        ),
+        trailing: IconButton(
+          icon: Icon(Icons.delete_forever),
+          onPressed: () => deleteTransactionById(id),
+          color: Theme.of(context).errorColor,
         ),
       ),
     );
