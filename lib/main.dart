@@ -17,13 +17,15 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.lightGreen,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
+              button: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
               subtitle1: TextStyle(
-                fontFamily: 'Quicksand',
                 fontSize: 14,
                 color: Colors.grey,
               ),
               headline2: TextStyle(
-                fontFamily: 'Quicksand',
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
@@ -73,11 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime date) {
     final newTransaction = Transaction(
       title: title,
       amount: amount,
-      date: DateTime.now(),
+      date: date,
     );
 
     setState(() {
