@@ -105,30 +105,44 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final AppBar appBar = AppBar(
+      title: Text('Expenses App'),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _openAddNewTransactionModal(context),
+        )
+      ],
+    );
+
+    final double expensesChartHeight = (MediaQuery.of(context).size.height -
+            appBar.preferredSize.height -
+            MediaQuery.of(context).padding.top) *
+        0.3;
+
+    final double transactionsListHeight = (MediaQuery.of(context).size.height -
+            appBar.preferredSize.height -
+            MediaQuery.of(context).padding.top) *
+        0.7;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Expenses App'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _openAddNewTransactionModal(context),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                child: ExpensesChart(_recentTransactions),
-              ),
-              TransactionList(
+      appBar: appBar,
+      body: Center(
+        child: Column(
+          children: [
+            Container(
+              height: expensesChartHeight,
+              width: double.infinity,
+              child: ExpensesChart(_recentTransactions),
+            ),
+            Container(
+              height: transactionsListHeight,
+              child: TransactionList(
                 transactions: _userTransactions,
                 deleteTransactionById: _deleteTransactionById,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
