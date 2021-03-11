@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Expenses App',
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -192,9 +193,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _openAddNewTransactionModal(context),
+      floatingActionButton: Visibility(
+        visible: !isLandscape,
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => _openAddNewTransactionModal(context),
+        ),
       ),
     );
   }
