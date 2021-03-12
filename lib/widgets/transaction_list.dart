@@ -18,12 +18,28 @@ class TransactionList extends StatelessWidget {
           ? TransactionListEmpty()
           : ListView.builder(
               itemBuilder: (context, index) {
-                return TransactionItem(
-                  id: transactions[index].id,
-                  title: transactions[index].title,
-                  amount: transactions[index].amount,
-                  date: transactions[index].date,
-                  deleteTransactionById: deleteTransactionById,
+                return Dismissible(
+                  key: UniqueKey(),
+                  onDismissed: (_) {
+                    deleteTransactionById(transactions[index].id);
+                  },
+                  child: TransactionItem(
+                    id: transactions[index].id,
+                    title: transactions[index].title,
+                    amount: transactions[index].amount,
+                    date: transactions[index].date,
+                    deleteTransactionById: deleteTransactionById,
+                  ),
+                  background: Container(
+                    color: Colors.red,
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    padding: EdgeInsets.only(right: 10),
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.delete_forever,
+                      color: Colors.white,
+                    ),
+                  ),
                 );
               },
               itemCount: transactions.length,
