@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // THIS IMPORT IS REQUIRED FOR WidgetsFlutterBinding AND SystemChrome
@@ -66,19 +67,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
     Transaction(
-      amount: 25,
+      amount: 9.99,
       date: DateTime.now().subtract(Duration(days: 2)),
-      title: 'Lol',
+      title: 'Shoes',
     ),
     Transaction(
-      amount: 5,
+      amount: 16.25,
       date: DateTime.now().subtract(Duration(days: 4)),
-      title: 'Lol',
+      title: 'Flowers',
     ),
     Transaction(
-      amount: 15,
+      amount: 25,
       date: DateTime.now(),
-      title: 'Lol',
+      title: 'Phone card',
     ),
   ];
 
@@ -125,15 +126,24 @@ class _MyHomePageState extends State<MyHomePage> {
     final meidaQuery = MediaQuery.of(context);
 
     final isLandscape = meidaQuery.orientation == Orientation.landscape;
-    final AppBar appBar = AppBar(
-      title: Text('Expenses App'),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _openAddNewTransactionModal(context),
-        )
-      ],
-    );
+
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Expenses App'),
+            trailing: GestureDetector(
+              child: Icon(CupertinoIcons.add),
+              onTap: () => _openAddNewTransactionModal(context),
+            ),
+          )
+        : AppBar(
+            title: Text('Expenses App'),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => _openAddNewTransactionModal(context),
+              )
+            ],
+          );
 
     final double expensesChartHeightInPortrait = (meidaQuery.size.height -
             appBar.preferredSize.height -
@@ -158,51 +168,66 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: Column(
-        children: [
-          if (isLandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Show chart'),
-                Switch.adaptive(
-                  activeColor: Theme.of(context).accentColor,
-                  value: _showChart,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _showChart = newValue;
-                    });
-                  },
-                )
-              ],
-            ),
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: expensesChartHeightInLandscape,
-                    width: double.infinity,
-                    child: ExpensesChart(_recentTransactions),
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Show chart',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                  Switch.adaptive(
+                    activeColor: Theme.of(context).accentColor,
+                    value: _showChart,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _showChart = newValue;
+                      });
+                    },
                   )
-                : transactionListContainer,
-          if (!isLandscape)
-            Container(
-              height: expensesChartHeightInPortrait,
-              width: double.infinity,
-              child: ExpensesChart(_recentTransactions),
-            ),
-          if (!isLandscape) transactionListContainer
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Visibility(
-        visible: !isLandscape && !Platform.isIOS,
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () => _openAddNewTransactionModal(context),
+                ],
+              ),
+            if (isLandscape)
+              _showChart
+                  ? Container(
+                      height: expensesChartHeightInLandscape,
+                      width: double.infinity,
+                      child: ExpensesChart(_recentTransactions),
+                    )
+                  : transactionListContainer,
+            if (!isLandscape)
+              Container(
+                height: expensesChartHeightInPortrait,
+                width: double.infinity,
+                child: ExpensesChart(_recentTransactions),
+              ),
+            if (!isLandscape) transactionListContainer
+          ],
         ),
       ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            navigationBar: appBar,
+            child: pageBody,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: pageBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Visibility(
+              visible: !isLandscape && !Platform.isIOS,
+              child: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => _openAddNewTransactionModal(context),
+              ),
+            ),
+          );
   }
 }
