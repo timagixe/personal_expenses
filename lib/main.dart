@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // THIS IMPORT IS REQUIRED FOR WidgetsFlutterBinding AND SystemChrome
@@ -165,7 +167,8 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Show chart'),
-                Switch(
+                Switch.adaptive(
+                  activeColor: Theme.of(context).accentColor,
                   value: _showChart,
                   onChanged: (newValue) {
                     setState(() {
@@ -194,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Visibility(
-        visible: !isLandscape,
+        visible: !isLandscape && !Platform.isIOS,
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () => _openAddNewTransactionModal(context),
