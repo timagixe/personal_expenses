@@ -121,13 +121,55 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final meidaQuery = MediaQuery.of(context);
+  List<Widget> _buildLandscapeContent(
+    double expensesChartHeightInLandscape,
+    Widget transactionListContainer,
+  ) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Show chart',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          Switch.adaptive(
+            activeColor: Theme.of(context).accentColor,
+            value: _showChart,
+            onChanged: (newValue) {
+              setState(() {
+                _showChart = newValue;
+              });
+            },
+          )
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: expensesChartHeightInLandscape,
+              width: double.infinity,
+              child: ExpensesChart(_recentTransactions),
+            )
+          : transactionListContainer,
+    ];
+  }
 
-    final isLandscape = meidaQuery.orientation == Orientation.landscape;
+  List<Widget> _buildPotraitContent(
+    double expensesChartHeightInPortrait,
+    Widget transactionListContainer,
+  ) {
+    return [
+      Container(
+        height: expensesChartHeightInPortrait,
+        width: double.infinity,
+        child: ExpensesChart(_recentTransactions),
+      ),
+      transactionListContainer
+    ];
+  }
 
-    final PreferredSizeWidget appBar = Platform.isIOS
+  PreferredSizeWidget _buildAppBar() {
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text('Expenses App'),
             trailing: GestureDetector(
@@ -144,6 +186,15 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ],
           );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final meidaQuery = MediaQuery.of(context);
+
+    final isLandscape = meidaQuery.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget appBar = _buildAppBar();
 
     final double expensesChartHeightInPortrait = (meidaQuery.size.height -
             appBar.preferredSize.height -
@@ -168,44 +219,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
 
-    final pageBody = SafeArea(
+    final SafeArea pageBody = SafeArea(
       child: SingleChildScrollView(
         child: Column(
           children: [
             if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Show chart',
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                  Switch.adaptive(
-                    activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _showChart = newValue;
-                      });
-                    },
-                  )
-                ],
+              ..._buildLandscapeContent(
+                expensesChartHeightInLandscape,
+                transactionListContainer,
               ),
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: expensesChartHeightInLandscape,
-                      width: double.infinity,
-                      child: ExpensesChart(_recentTransactions),
-                    )
-                  : transactionListContainer,
             if (!isLandscape)
-              Container(
-                height: expensesChartHeightInPortrait,
-                width: double.infinity,
-                child: ExpensesChart(_recentTransactions),
+              ..._buildPotraitContent(
+                expensesChartHeightInPortrait,
+                transactionListContainer,
               ),
-            if (!isLandscape) transactionListContainer
           ],
         ),
       ),
